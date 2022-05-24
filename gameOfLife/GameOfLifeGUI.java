@@ -1,4 +1,4 @@
-package gameOfLife.gameOfLife;
+package gameOfLife;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

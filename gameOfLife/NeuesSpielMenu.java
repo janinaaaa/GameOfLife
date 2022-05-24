@@ -1,4 +1,4 @@
-package gameOfLife.gameOfLife;
+package gameOfLife;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
