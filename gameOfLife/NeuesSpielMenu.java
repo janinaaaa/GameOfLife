@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 /**
  * @author Janina Dörflinger (211923)
  * @author Marvin Hill (211926)
+ * @version 25.05.2022
  * Dieses Menü wird aufgerufen, wenn man ein neues GameOfLife erstellen will
  */
 
