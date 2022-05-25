@@ -33,7 +33,7 @@ public class Zelle extends JPanel{
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if(MouseEvent.BUTTON1 == e.getButton()){
-                    if(GameOfLifeGUI.ausgewaehlterModus.equals("setzen"))
+                    if(GameOfLifeGUI.ausgewaehlterModus == States.SETZEN)
                         isAlive = !isAlive;
                     updateColor();
                     SwingUtilities.updateComponentTreeUI(game.getContentPane());
@@ -50,7 +50,7 @@ public class Zelle extends JPanel{
              */
             @Override
             public void mouseEntered(MouseEvent e) {
-               if(GameOfLifeGUI.ausgewaehlterModus.equals("malen")){
+               if(GameOfLifeGUI.ausgewaehlterModus == States.MALEN){
                     isAlive = true;
                     updateColor();
                     SwingUtilities.updateComponentTreeUI(game.getContentPane());

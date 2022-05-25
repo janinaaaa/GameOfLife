@@ -82,9 +82,6 @@ public class NeuesSpielMenu extends JFrame {
                 setLocationRelativeTo(null);
                 gui.add(game);
                 dispose();
-
-
-
             }
         });
 

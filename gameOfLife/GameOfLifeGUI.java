@@ -32,7 +32,7 @@ public class GameOfLifeGUI extends JFrame{
 
     JDesktopPane pane;
 
-    public static String ausgewaehlterModus = "setzen"; //Modus ist per Default immer setzen
+    public static States ausgewaehlterModus = States.SETZEN; //Modus ist per Default immer setzen
 
     public GameOfLifeGUI(){
 
@@ -68,21 +68,21 @@ public class GameOfLifeGUI extends JFrame{
         laufen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ausgewaehlterModus = "laufen";
+                ausgewaehlterModus = States.LAUFEN;
             }
         });
 
         setzen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ausgewaehlterModus = "setzen";
+                ausgewaehlterModus = States.SETZEN;
             }
         });
 
         malen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ausgewaehlterModus = "malen";
+                ausgewaehlterModus = States.MALEN;
             }
         });
 
