@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 import static java.lang.Thread.sleep;
 
@@ -30,7 +31,7 @@ public class GameOfLife extends JInternalFrame {
   JMenu figuren, obszilierend, segler;
   JMenuItem blinker, uhr, oktagon, gleiter, lwss, mwss;
   // Zeit welche gewartet wird zwischen simulations durchlauf
-  int warteZeit = 20;
+  int warteZeit = 50;
 
   /**
    * Konstruktor von Game of Life
@@ -105,97 +106,104 @@ public class GameOfLife extends JInternalFrame {
         new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
-            int[][] blinker = new int[][]{
-                    {0, 1, 0},
-                    {0, 1, 0},
-                    {0, 1, 0}
-            };
+            int[][] blinker =
+                new int[][] {
+                  {0, 1, 0},
+                  {0, 1, 0},
+                  {0, 1, 0}
+                };
             zeichneFigur(blinker);
           }
         });
     obszilierend.add(blinker);
     uhr = new JMenuItem("Uhr");
-    uhr.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        int[][] uhr = new int[][]{
-                {0, 0, 1, 0, 0, 0},
-                {0, 0, 1, 0, 1, 0},
-                {0, 1, 0, 1, 0, 0},
-                {0, 0, 0, 1, 0, 0}
-        };
-        zeichneFigur(uhr);
-      }
-    });
+    uhr.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            int[][] uhr =
+                new int[][] {
+                  {0, 0, 1, 0, 0, 0},
+                  {0, 0, 1, 0, 1, 0},
+                  {0, 1, 0, 1, 0, 0},
+                  {0, 0, 0, 1, 0, 0}
+                };
+            zeichneFigur(uhr);
+          }
+        });
     obszilierend.add(uhr);
 
-
-
     oktagon = new JMenuItem("Oktagon");
-    oktagon.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        int[][] oktagon = new int[][] {
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 1, 0, 0, 1, 0},
-                {0, 1, 0, 1, 1, 0, 1},
-                {0, 0, 1, 0, 0, 1, 0},
-                {0, 0, 1, 0, 0, 1, 0},
-                {0, 1, 0, 1, 1, 0, 1},
-                {0, 0, 1, 0, 0, 1, 0}
-        };
-        zeichneFigur(oktagon);
-      }
-    });
+    oktagon.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            int[][] oktagon =
+                new int[][] {
+                  {0, 0, 0, 0, 0, 0, 0},
+                  {0, 0, 1, 0, 0, 1, 0},
+                  {0, 1, 0, 1, 1, 0, 1},
+                  {0, 0, 1, 0, 0, 1, 0},
+                  {0, 0, 1, 0, 0, 1, 0},
+                  {0, 1, 0, 1, 1, 0, 1},
+                  {0, 0, 1, 0, 0, 1, 0}
+                };
+            zeichneFigur(oktagon);
+          }
+        });
     obszilierend.add(oktagon);
-
 
     // Fügt Segler und Raumschiffe hinzu
     gleiter = new JMenuItem("Gleiter");
-    gleiter.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        int[][] gleiter = new int[][]{
-                {0, 1, 0},
-                {0, 0, 1},
-                {1, 1, 1}
-        };
-        zeichneFigur(gleiter);
-      }
-    });
+    gleiter.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            int[][] gleiter =
+                new int[][] {
+                  {0, 1, 0},
+                  {0, 0, 1},
+                  {1, 1, 1}
+                };
+            zeichneFigur(gleiter);
+          }
+        });
     segler.add(gleiter);
 
     lwss = new JMenuItem("Light-Weight Spaceship");
-    lwss.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-         int[][] lwss = new int[][]{
-                 {0, 1, 1, 1, 1},
-                 {1, 0, 0, 0, 1},
-                 {0, 0, 0, 0, 1},
-                 {1, 0, 0, 1, 0}
-         };
-         zeichneFigur(lwss);
-      }
-    });
+    lwss.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            int[][] lwss =
+                new int[][] {
+                  {0, 1, 1, 1, 1},
+                  {1, 0, 0, 0, 1},
+                  {0, 0, 0, 0, 1},
+                  {1, 0, 0, 1, 0}
+                };
+            zeichneFigur(lwss);
+          }
+        });
     segler.add(lwss);
 
     mwss = new JMenuItem("Middle-Weight Spaceship");
-    mwss.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        int[][] mwss= new int[][]{
-                {0, 1, 1, 1, 1, 1},
-                {1, 0, 0, 0, 0, 1},
-                {0, 0, 0, 0, 0, 1},
-                {1, 0, 0, 0, 1, 0},
-                {0, 0, 1, 0, 0, 0}
-        };
-        zeichneFigur(mwss);
-      }
-    });
+    mwss.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            int[][] mwss =
+                new int[][] {
+                  {0, 1, 1, 1, 1, 1},
+                  {1, 0, 0, 0, 0, 1},
+                  {0, 0, 0, 0, 0, 1},
+                  {1, 0, 0, 0, 1, 0},
+                  {0, 0, 1, 0, 0, 0}
+                };
+            zeichneFigur(mwss);
+          }
+        });
     segler.add(mwss);
-
 
     popupMenu = new JPopupMenu();
     popupMenu.add(farbeToteZelleÄndern);
@@ -213,50 +221,56 @@ public class GameOfLife extends JInternalFrame {
             new Runnable() {
               @Override
               public void run() {
+                // TODO - Beim schließen des Fensters
+                //  wird der Thread nicht beendet
                 while (true) {
-                  if(GameOfLifeGUI.ausgewaehlterModus == States.LAUFEN)
-                  for (int i = 0; i < gameboard.length; i++) {
-                    for (int j = 0; j < gameboard[i].length; j++) {
-                      int x = i;
-                      int y = j;
-                      int lebendeNachbarn = 0;
+                  if (GameOfLifeGUI.ausgewaehlterModus == States.LAUFEN)
+                    for (int i = 0; i < gameboard.length; i++) {
+                      for (int j = 0; j < gameboard[i].length; j++) {
+                        int lebendeNachbarn = 0;
 
-                      //if(x-1<0) x=gameboard.length - 1;
-                      //if(y-1<0) y=gameboard[i].length - 1;
+                        System.out.print("\nzelle " + "(" + i + "," + j + ") : ");
+                        for (Directions d : Directions.values()) {
 
-                      //Links
-                      Zelle zelle = gameboard[x][y-1<0 ? gameboard[i].length -1 : y-1];
-                      //Rechts
-                      Zelle zelle2 = gameboard[x][(y + 1) % gameboard[i].length];
-                      //Oben
-                      Zelle zelle3 = gameboard[x-1<0 ? gameboard.length-1 : x-1][y];
-                      //Unten
-                      Zelle zelle4 = gameboard[(x + 1) % gameboard.length][y];
-                      //Rechtsoben
-                      Zelle zelle5 = gameboard[x-1<0 ? gameboard.length-1 : x-1][(y + 1) % gameboard[i].length];
-                      //Rechtsunten
-                      Zelle zelle6 = gameboard[(x + 1) % gameboard.length][(y + 1) % gameboard[i].length];
-                      //Linksoben
-                      Zelle zelle7 = gameboard[x-1<0 ? gameboard.length-1 : x-1][y-1<0 ? gameboard[i].length-1 : y-1];
-                      //Linksunten
-                      Zelle zelle8 = gameboard[(x + 1) % gameboard.length][y-1<0 ? gameboard[i].length-1 : y-1];
+                          // TODO - Ursprüngliches Datenarray darf erst ganz am Ende verändert
+                          //  werden, jede Zelle muss noch auf das ursprüngliche Array zugreifen
+                          //  können!
 
-                      if (zelle.isAlive) lebendeNachbarn += 1;
-                      if (zelle2.isAlive) lebendeNachbarn += 1;
-                      if (zelle3.isAlive) lebendeNachbarn += 1;
-                      if (zelle4.isAlive) lebendeNachbarn += 1;
-                      if (zelle5.isAlive) lebendeNachbarn += 1;
-                      if (zelle6.isAlive) lebendeNachbarn += 1;
-                      if (zelle7.isAlive) lebendeNachbarn += 1;
-                      if (zelle8.isAlive) lebendeNachbarn += 1;
+                          int ni = i + d.i;
+                          int nj = j + d.j;
 
-                      if (lebendeNachbarn == 3 && !gameboard[i][j].isAlive) gameboard[i][j].isAlive = true;
-                      else if ((lebendeNachbarn == 2 || lebendeNachbarn == 3) && gameboard[i][j].isAlive)
-                        gameboard[i][j].isAlive = true;
-                      else gameboard[i][j].isAlive = false;
-                      gameboard[i][j].updateColor();
+                          if (ni < 0) {
+                            ni = gameboard.length - 1;
+                          }
+                          if (nj < 0) {
+                            nj = gameboard[i].length - 1;
+                          }
+                          if (ni > (gameboard.length - 1)) {
+                            ni = 0;
+                          }
+                          if (nj > (gameboard[i].length - 1)) {
+                            nj = 0;
+                          }
+
+                          System.out.print("(" + d + " " + ni + "," + nj + ")");
+                        }
+
+                        if (lebendeNachbarn == 3 && !gameboard[i][j].isAlive) {
+                          gameboard[i][j].isAlive = true;
+                          gameboard[i][j].updateColor();
+                        } else if (lebendeNachbarn < 2 && gameboard[i][j].isAlive) {
+                          gameboard[i][j].isAlive = false;
+                          gameboard[i][j].updateColor();
+                        } else if ((lebendeNachbarn == 2 || lebendeNachbarn == 3)
+                            && gameboard[i][j].isAlive) {
+                          gameboard[i][j].isAlive = true;
+                          gameboard[i][j].updateColor();
+                        } else if (lebendeNachbarn > 3 && gameboard[i][j].isAlive) {
+                          gameboard[i][j].isAlive = false;
+                          gameboard[i][j].updateColor();
+                        }
+                      }
                     }
-                  }
                   SwingUtilities.invokeLater(
                       () -> {
                         SwingUtilities.updateComponentTreeUI(GameOfLife.this.getContentPane());
@@ -273,12 +287,14 @@ public class GameOfLife extends JInternalFrame {
         .start();
   }
 
-  /** @param e ist das MouseEvent */
+  /**
+   * @param e ist das MouseEvent
+   */
   public void showPopUpMenu(MouseEvent e) {
     popupMenu.show(e.getComponent(), e.getX(), e.getY());
   }
 
-  public void clear(){
+  public void clear() {
     for (int i = 0; i < gameboard.length; i++) {
       for (int j = 0; j < gameboard[i].length; j++) {
         gameboard[i][j].isAlive = false;
@@ -288,16 +304,15 @@ public class GameOfLife extends JInternalFrame {
     }
   }
 
-  public void zeichneFigur(int[][] figur){
+  public void zeichneFigur(int[][] figur) {
     clear();
     for (int i = 0; i < figur.length; i++) {
       for (int j = 0; j < figur[i].length; j++) {
-        if(figur[i][j] == 1){
+        if (figur[i][j] == 1) {
           gameboard[i][j].isAlive = true;
           gameboard[i][j].updateColor();
           SwingUtilities.updateComponentTreeUI(this);
-        }
-        else {
+        } else {
           gameboard[i][j].isAlive = false;
           gameboard[i][j].updateColor();
           SwingUtilities.updateComponentTreeUI(this);
