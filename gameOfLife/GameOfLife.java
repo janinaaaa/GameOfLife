@@ -28,7 +28,7 @@ public class GameOfLife extends JInternalFrame {
   JMenuBar menuBar = new JMenuBar();
 
   JMenu figuren, obszilierend, segler;
-  JMenuItem blinker, uhr, pulsator, oktagon, gleiter, lwss, mwss, hwss;
+  JMenuItem blinker, uhr, oktagon, gleiter, lwss, mwss;
 
   /**
    * Konstruktor von Game of Life
@@ -103,35 +103,98 @@ public class GameOfLife extends JInternalFrame {
         new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
-            for (int i = 0; i < gameboard.length; i++) {
-              for (int j = 0; j < gameboard[i].length; j++) {
-                gameboard[i][j].isAlive = false;
-              }
-            }
-            gameboard[1][0].isAlive = true;
-            gameboard[1][0].updateColor();
-            gameboard[1][1].isAlive = true;
-            gameboard[1][1].updateColor();
-            gameboard[1][2].isAlive = true;
-            gameboard[1][2].updateColor();
+            int[][] blinker = new int[][]{
+                    {0, 1, 0},
+                    {0, 1, 0},
+                    {0, 1, 0}
+            };
+            zeichneFigur(blinker);
           }
         });
     obszilierend.add(blinker);
+
     uhr = new JMenuItem("Uhr");
+    uhr.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        int[][] uhr = new int[][]{
+                {0, 0, 1, 0, 0, 0},
+                {0, 0, 1, 0, 1, 0},
+                {0, 1, 0, 1, 0, 0},
+                {0, 0, 0, 1, 0, 0}
+        };
+        zeichneFigur(uhr);
+      }
+    });
     obszilierend.add(uhr);
-    pulsator = new JMenuItem("Pulsator");
-    obszilierend.add(pulsator);
+
+
+
     oktagon = new JMenuItem("Oktagon");
+    oktagon.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        int[][] oktagon = new int[][] {
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 1, 0},
+                {0, 1, 0, 1, 1, 0, 1},
+                {0, 0, 1, 0, 0, 1, 0},
+                {0, 0, 1, 0, 0, 1, 0},
+                {0, 1, 0, 1, 1, 0, 1},
+                {0, 0, 1, 0, 0, 1, 0}
+        };
+        zeichneFigur(oktagon);
+      }
+    });
     obszilierend.add(oktagon);
+
+
     // Fügt Segler und Raumschiffe hinzu
     gleiter = new JMenuItem("Gleiter");
+    gleiter.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        int[][] gleiter = new int[][]{
+                {0, 1, 0},
+                {0, 0, 1},
+                {1, 1, 1}
+        };
+        zeichneFigur(gleiter);
+      }
+    });
     segler.add(gleiter);
+
     lwss = new JMenuItem("Light-Weight Spaceship");
+    lwss.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+         int[][] lwss = new int[][]{
+                 {0, 1, 1, 1, 1},
+                 {1, 0, 0, 0, 1},
+                 {0, 0, 0, 0, 1},
+                 {1, 0, 0, 1, 0}
+         };
+         zeichneFigur(lwss);
+      }
+    });
     segler.add(lwss);
+
     mwss = new JMenuItem("Middle-Weight Spaceship");
+    mwss.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        int[][] mwss= new int[][]{
+                {0, 1, 1, 1, 1, 1},
+                {1, 0, 0, 0, 0, 1},
+                {0, 0, 0, 0, 0, 1},
+                {1, 0, 0, 0, 1, 0},
+                {0, 0, 1, 0, 0, 0}
+        };
+        zeichneFigur(mwss);
+      }
+    });
     segler.add(mwss);
-    hwss = new JMenuItem("Heavy-Weight Spaceship");
-    segler.add(hwss);
+
 
     popupMenu = new JPopupMenu();
     popupMenu.add(farbeToteZelleÄndern);
@@ -212,5 +275,33 @@ public class GameOfLife extends JInternalFrame {
   /** @param e ist das MouseEvent */
   public void showPopUpMenu(MouseEvent e) {
     popupMenu.show(e.getComponent(), e.getX(), e.getY());
+  }
+
+  public void clear(){
+    for (int i = 0; i < gameboard.length; i++) {
+      for (int j = 0; j < gameboard[i].length; j++) {
+        gameboard[i][j].isAlive = false;
+        gameboard[i][j].updateColor();
+        SwingUtilities.updateComponentTreeUI(this);
+      }
+    }
+  }
+
+  public void zeichneFigur(int[][] figur){
+    clear();
+    for (int i = 0; i < figur.length; i++) {
+      for (int j = 0; j < figur[i].length; j++) {
+        if(figur[i][j] == 1){
+          gameboard[i][j].isAlive = true;
+          gameboard[i][j].updateColor();
+          SwingUtilities.updateComponentTreeUI(this);
+        }
+        else {
+          gameboard[i][j].isAlive = false;
+          gameboard[i][j].updateColor();
+          SwingUtilities.updateComponentTreeUI(this);
+        }
+      }
+    }
   }
 }
