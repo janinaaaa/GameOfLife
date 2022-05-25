@@ -47,6 +47,7 @@ public class NeuesSpielMenu extends JFrame {
         farbeTotText = new JLabel("Farbe für tote Zellen wählen");
         add(farbeTotText);
         farbeTotWaehlen = new JButton();
+        farbeTotWaehlen.setPreferredSize(new Dimension(75,25));
         farbeTot = Color.lightGray;
         farbeTotWaehlen.setBackground(farbeTot);
         farbeTotWaehlen.addActionListener(new ActionListener() {
@@ -61,6 +62,7 @@ public class NeuesSpielMenu extends JFrame {
         farbeLebendigText = new JLabel("Farbe für lebendige Zellen wählen");
         add(farbeLebendigText);
         farbeLebendigWaehlen = new JButton();
+        farbeLebendigWaehlen.setPreferredSize(new Dimension(75,25));
         farbeLebendig = Color.green;
         farbeLebendigWaehlen.setBackground(farbeLebendig);
         farbeLebendigWaehlen.addActionListener(new ActionListener() {
