@@ -229,7 +229,7 @@ public class GameOfLife extends JInternalFrame {
                       for (int j = 0; j < gameboard[i].length; j++) {
                         int lebendeNachbarn = 0;
 
-                        System.out.print("\nzelle " + "(" + i + "," + j + ") : ");
+                        // System.out.print("\nzelle " + "(" + i + "," + j + ") : "); // Debug Code
                         for (Directions d : Directions.values()) {
 
                           // TODO - Ursprüngliches Datenarray darf erst ganz am Ende verändert
@@ -252,7 +252,7 @@ public class GameOfLife extends JInternalFrame {
                             nj = 0;
                           }
 
-                          System.out.print("(" + d + " " + ni + "," + nj + ")");
+                          //System.out.print("(" + d + " " + ni + "," + nj + ")"); //Debug Code
                         }
 
                         if (lebendeNachbarn == 3 && !gameboard[i][j].isAlive) {
