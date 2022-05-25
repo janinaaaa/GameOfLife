@@ -29,6 +29,8 @@ public class GameOfLife extends JInternalFrame {
 
   JMenu figuren, obszilierend, segler;
   JMenuItem blinker, uhr, oktagon, gleiter, lwss, mwss;
+  // Zeit welche gewartet wird zwischen simulations durchlauf
+  int warteZeit = 20;
 
   /**
    * Konstruktor von Game of Life
@@ -112,7 +114,6 @@ public class GameOfLife extends JInternalFrame {
           }
         });
     obszilierend.add(blinker);
-
     uhr = new JMenuItem("Uhr");
     uhr.addActionListener(new ActionListener() {
       @Override
@@ -262,7 +263,7 @@ public class GameOfLife extends JInternalFrame {
                       });
 
                   try {
-                    sleep(100);
+                    sleep(warteZeit);
                   } catch (InterruptedException e) {
                     e.printStackTrace();
                   }
