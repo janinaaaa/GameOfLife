@@ -96,7 +96,7 @@ public class GameOfLifeGUI extends JFrame{
 
 
         //Erstellt und fügt ein neues Game of Life hinzu
-        GameOfLife testGame = new GameOfLife(8, Color.PINK, Color.BLUE);
+        GameOfLife testGame = new GameOfLife(8, Color.GREEN, Color.LIGHT_GRAY);
         testGame.setSize(new Dimension(250,250));
         add(testGame);
 

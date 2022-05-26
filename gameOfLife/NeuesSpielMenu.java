@@ -28,7 +28,7 @@ public class NeuesSpielMenu extends JFrame {
         setLayout(new FlowLayout());
         groesseText = new JLabel("Größe auswählen: ");
         add(groesseText);
-        groesseWaehlen = new JSlider(SwingConstants.HORIZONTAL, 7, 15, 8);
+        groesseWaehlen = new JSlider(SwingConstants.HORIZONTAL, 8, 15, 8);
 
         groesseWaehlen.setMinorTickSpacing(1);
         groesseWaehlen.setMajorTickSpacing(1);

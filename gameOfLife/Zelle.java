@@ -18,9 +18,10 @@ import javax.swing.border.LineBorder;
 public class Zelle extends JPanel{
     GameOfLife game;
     boolean isAlive; //zeigt an, ob eine Zelle tot oder lebendig ist
+    boolean lebendigSetzen;
 
     Zelle(GameOfLife game){
-        setBorder(new LineBorder(Color.pink));
+        setBorder(new LineBorder(Color.black));
         this.game = game;
         isAlive = false;
         this.updateColor();

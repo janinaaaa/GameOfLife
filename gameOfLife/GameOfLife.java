@@ -31,7 +31,7 @@ public class GameOfLife extends JInternalFrame {
   JMenu figuren, obszilierend, segler;
   JMenuItem blinker, uhr, oktagon, gleiter, lwss, mwss;
   // Zeit welche gewartet wird zwischen simulations durchlauf
-  int warteZeit = 50;
+  int warteZeit = 200;
 
   /**
    * Konstruktor von Game of Life
@@ -224,60 +224,67 @@ public class GameOfLife extends JInternalFrame {
                 // TODO - Beim schließen des Fensters
                 //  wird der Thread nicht beendet
                 while (true) {
-                  if (GameOfLifeGUI.ausgewaehlterModus == States.LAUFEN)
+                  if (GameOfLifeGUI.ausgewaehlterModus == States.LAUFEN){
                     for (int i = 0; i < gameboard.length; i++) {
                       for (int j = 0; j < gameboard[i].length; j++) {
-                        int lebendeNachbarn = 0;
+                          int x = i;
+                          int y = j;
+                          int lebendeNachbarn = 0;
 
-                        // System.out.print("\nzelle " + "(" + i + "," + j + ") : "); // Debug Code
-                        for (Directions d : Directions.values()) {
+                          //if(x-1<0) x=gameboard.length - 1;
+                          //if(y-1<0) y=gameboard[i].length - 1;
 
-                          // TODO - Ursprüngliches Datenarray darf erst ganz am Ende verändert
-                          //  werden, jede Zelle muss noch auf das ursprüngliche Array zugreifen
-                          //  können!
+                          //Links
+                          Zelle zelle = gameboard[x][y-1<0 ? gameboard[i].length -1 : y-1];
+                          //Rechts
+                          Zelle zelle2 = gameboard[x][(y + 1) % gameboard[i].length];
+                          //Oben
+                          Zelle zelle3 = gameboard[x-1<0 ? gameboard.length-1 : x-1][y];
+                          //Unten
+                          Zelle zelle4 = gameboard[(x + 1) % gameboard.length][y];
+                          //Rechtsoben
+                          Zelle zelle5 = gameboard[x-1<0 ? gameboard.length-1 : x-1][(y + 1) % gameboard[i].length];
+                          //Rechtsunten
+                          Zelle zelle6 = gameboard[(x + 1) % gameboard.length][(y + 1) % gameboard[i].length];
+                          //Linksoben
+                          Zelle zelle7 = gameboard[x-1<0 ? gameboard.length-1 : x-1][y-1<0 ? gameboard[i].length-1 : y-1];
+                          //Linksunten
+                          Zelle zelle8 = gameboard[(x + 1) % gameboard.length][y-1<0 ? gameboard[i].length-1 : y-1];
 
-                          int ni = i + d.i;
-                          int nj = j + d.j;
+                          if (zelle.isAlive) lebendeNachbarn += 1;
+                          if (zelle2.isAlive) lebendeNachbarn += 1;
+                          if (zelle3.isAlive) lebendeNachbarn += 1;
+                          if (zelle4.isAlive) lebendeNachbarn += 1;
+                          if (zelle5.isAlive) lebendeNachbarn += 1;
+                          if (zelle6.isAlive) lebendeNachbarn += 1;
+                          if (zelle7.isAlive) lebendeNachbarn += 1;
+                          if (zelle8.isAlive) lebendeNachbarn += 1;
 
-                          if (ni < 0) {
-                            ni = gameboard.length - 1;
-                          }
-                          if (nj < 0) {
-                            nj = gameboard[i].length - 1;
-                          }
-                          if (ni > (gameboard.length - 1)) {
-                            ni = 0;
-                          }
-                          if (nj > (gameboard[i].length - 1)) {
-                            nj = 0;
-                          }
+                          if (lebendeNachbarn == 3 && !gameboard[i][j].isAlive) gameboard[i][j].lebendigSetzen = true;
+                          else if ((lebendeNachbarn == 2 || lebendeNachbarn == 3) && gameboard[i][j].isAlive)
+                              gameboard[i][j].lebendigSetzen = true;
+                          else gameboard[i][j].lebendigSetzen = false;
 
-                          //System.out.print("(" + d + " " + ni + "," + nj + ")"); //Debug Code
-                        }
-
-                        if (lebendeNachbarn == 3 && !gameboard[i][j].isAlive) {
-                          gameboard[i][j].isAlive = true;
-                          gameboard[i][j].updateColor();
-                        } else if (lebendeNachbarn < 2 && gameboard[i][j].isAlive) {
-                          gameboard[i][j].isAlive = false;
-                          gameboard[i][j].updateColor();
-                        } else if ((lebendeNachbarn == 2 || lebendeNachbarn == 3)
-                            && gameboard[i][j].isAlive) {
-                          gameboard[i][j].isAlive = true;
-                          gameboard[i][j].updateColor();
-                        } else if (lebendeNachbarn > 3 && gameboard[i][j].isAlive) {
-                          gameboard[i][j].isAlive = false;
-                          gameboard[i][j].updateColor();
-                        }
                       }
                     }
+                      for (Zelle[] zellen : gameboard) {
+                          for (Zelle zelle : zellen) {
+                              zelle.isAlive = zelle.lebendigSetzen;
+                              zelle.updateColor();
+                          }
+                      }
+
+                  }
+
+
+
                   SwingUtilities.invokeLater(
                       () -> {
                         SwingUtilities.updateComponentTreeUI(GameOfLife.this.getContentPane());
                       });
 
                   try {
-                    sleep(warteZeit);
+                    sleep(warteZeit); //TODO Wartezeit-Button
                   } catch (InterruptedException e) {
                     e.printStackTrace();
                   }
