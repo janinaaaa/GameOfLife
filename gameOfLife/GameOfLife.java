@@ -28,10 +28,10 @@ public class GameOfLife extends JInternalFrame {
 
   JMenuBar menuBar = new JMenuBar();
 
-  JMenu figuren, obszilierend, segler;
-  JMenuItem blinker, uhr, oktagon, gleiter, lwss, mwss;
+  JMenu figuren, obszilierend, segler, geschwindigkeit;
+  JMenuItem blinker, uhr, oktagon, gleiter, lwss, mwss, langsam, mittel, schnell;
   // Zeit welche gewartet wird zwischen simulations durchlauf
-  int warteZeit = 200;
+  int warteZeit = 250;
 
   /**
    * Konstruktor von Game of Life
@@ -204,6 +204,37 @@ public class GameOfLife extends JInternalFrame {
           }
         });
     segler.add(mwss);
+
+    geschwindigkeit = new JMenu("Geschwindigkeit");
+    menuBar.add(geschwindigkeit);
+    langsam = new JMenuItem("Langsam");
+    mittel = new JMenuItem("Mittel");
+    schnell = new JMenuItem("Schnell");
+    geschwindigkeit.add(langsam);
+    geschwindigkeit.add(mittel);
+    geschwindigkeit.add(schnell);
+
+    langsam.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        warteZeit = 500;
+      }
+    });
+
+    mittel.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        warteZeit = 250;
+      }
+    });
+
+    schnell.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        warteZeit = 100;
+      }
+    });
+
 
     popupMenu = new JPopupMenu();
     popupMenu.add(farbeToteZelleÄndern);
