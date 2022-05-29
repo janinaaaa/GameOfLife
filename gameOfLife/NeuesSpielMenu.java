@@ -22,7 +22,11 @@ public class NeuesSpielMenu extends JFrame {
     GameOfLifeGUI gui;
     Color farbeLebendig, farbeTot;
 
-
+    /**
+     * Konstruktor von NeuesSpielMenü
+     * @param parentGUI ist das dazugehörige GUI-Objekt
+     * Wenn man ein neues Spiel erstellen will, kann man dort Größe und Farbe hierfür auswählen
+     */
     public NeuesSpielMenu(GameOfLifeGUI parentGUI){
         gui = parentGUI;
         setLayout(new FlowLayout());
@@ -30,6 +34,7 @@ public class NeuesSpielMenu extends JFrame {
         add(groesseText);
         groesseWaehlen = new JSlider(SwingConstants.HORIZONTAL, 8, 15, 8);
 
+        //Slider, um die Größe zu wählen
         groesseWaehlen.setMinorTickSpacing(1);
         groesseWaehlen.setMajorTickSpacing(1);
         groesseWaehlen.setPaintTicks(true);
@@ -43,7 +48,7 @@ public class NeuesSpielMenu extends JFrame {
         });
 
 
-
+        //Um die Farbe zu wählen
         farbeTotText = new JLabel("Farbe für tote Zellen wählen");
         add(farbeTotText);
         farbeTotWaehlen = new JButton();
@@ -74,6 +79,7 @@ public class NeuesSpielMenu extends JFrame {
         });
         add(farbeLebendigWaehlen);
 
+        //Am Schluss wird bestätigt, es wird ein neues Spiel erstellt und das Fenster verschwindet
         bestaetigen = new JButton("OK");
         add(bestaetigen);
         bestaetigen.addActionListener(new ActionListener() {
