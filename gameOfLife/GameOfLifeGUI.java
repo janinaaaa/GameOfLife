@@ -21,27 +21,23 @@ import javax.swing.JMenuItem;
 public class GameOfLifeGUI extends JFrame{
 
     JMenuBar menuBar;
-
-    JMenu modus;
-    JMenu fenster;
-
-    JMenuItem laufen;
-    JMenuItem setzen;
-    JMenuItem malen;
-    JMenuItem neuesFenster;
-
+    JMenu modus, fenster;
+    JMenuItem laufen, setzen, malen,  neuesFenster;
     JDesktopPane pane;
 
     public static States ausgewaehlterModus = States.SETZEN; //Modus ist per Default immer setzen
 
+    /**
+     * Der Konstruktor von GameOfLife-GUI
+     * nimmt keine Parameter
+     */
     public GameOfLifeGUI(){
-
+        //Desktop-Manager
         pane = new JDesktopPane();
         pane.setDesktopManager(new DefaultDesktopManager());
         setContentPane(pane);
 
-
-
+        //Neue Menübar
         menuBar = new JMenuBar(); //neue Menübar
         this.setJMenuBar(menuBar);
 
@@ -86,7 +82,7 @@ public class GameOfLifeGUI extends JFrame{
             }
         });
 
-
+        //ActionListener für ein neues Fenster --> erstellt ein NeuesSpielMenü-Objekt
         neuesFenster.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
