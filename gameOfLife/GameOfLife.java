@@ -217,7 +217,7 @@ public class GameOfLife extends JInternalFrame {
     mittel = new JMenuItem("Mittel");
     schnell = new JMenuItem("Schnell");
 
-    //Die Geschwindigkeit kann mit diesen MenuItems geädert werden
+    //Die Geschwindigkeit kann mit diesen MenuItems geändert werden
     geschwindigkeit.add(langsam);
     geschwindigkeit.add(mittel);
     geschwindigkeit.add(schnell);

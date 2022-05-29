@@ -28,6 +28,8 @@ public class NeuesSpielMenu extends JFrame {
      * Wenn man ein neues Spiel erstellen will, kann man dort Größe und Farbe hierfür auswählen
      */
     public NeuesSpielMenu(GameOfLifeGUI parentGUI){
+
+        setResizable(false);
         gui = parentGUI;
         setLayout(new FlowLayout());
         groesseText = new JLabel("Größe auswählen: ");
@@ -55,12 +57,18 @@ public class NeuesSpielMenu extends JFrame {
         farbeTotWaehlen.setPreferredSize(new Dimension(75,25));
         farbeTot = Color.lightGray;
         farbeTotWaehlen.setBackground(farbeTot);
-        farbeTotWaehlen.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                farbeTot = JColorChooser.showDialog(null, "Farbe Tot Wählen", farbeTotWaehlen.getBackground());
-                farbeTotWaehlen.setBackground(farbeTot);
-            }
+    farbeTotWaehlen.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+              Color gewählteFarbe = JColorChooser.showDialog(null, "Farbe Tot Wählen", farbeTotWaehlen.getBackground());
+
+              // Wenn das Fenster geschlossen ist soll die alte Farbe behalten werden
+              if(gewählteFarbe != null) {
+                  farbeTot = gewählteFarbe;
+                  farbeTotWaehlen.setBackground(farbeTot);
+              }
+          }
         });
         add(farbeTotWaehlen);
 
@@ -73,8 +81,13 @@ public class NeuesSpielMenu extends JFrame {
         farbeLebendigWaehlen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                farbeLebendig = JColorChooser.showDialog(null,"Farbe Lebendig Wählen", farbeLebendigWaehlen.getBackground());
-                farbeLebendigWaehlen.setBackground(farbeLebendig);
+                Color gewählteFarbe = JColorChooser.showDialog(null, "Farbe Lebendig Wählen", farbeLebendigWaehlen.getBackground());
+
+                // Wenn das Fenster geschlossen ist soll die alte Farbe behalten werden
+                if(gewählteFarbe != null) {
+                    farbeLebendig = gewählteFarbe;
+                    farbeLebendigWaehlen.setBackground(farbeLebendig);
+                }
             }
         });
         add(farbeLebendigWaehlen);
