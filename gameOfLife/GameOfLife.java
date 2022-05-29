@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+
 
 import static java.lang.Thread.sleep;
 
@@ -45,6 +45,8 @@ public class GameOfLife extends JInternalFrame {
     farbeTot = farbeT;
     farbeToteZelleÄndern = new JMenuItem("Farbe: Tote Zellen");
     farbeLebendigeZelleÄndern = new JMenuItem("Farbe: Lebendige Zellen");
+
+    //Man kann die Farben der toten Zellen über einen JColorChooser ändern
     farbeToteZelleÄndern.addActionListener(
         new ActionListener() {
           @Override
@@ -59,6 +61,7 @@ public class GameOfLife extends JInternalFrame {
           }
         });
 
+    //Man kann die Farben der lebendigen Zellen über einen JColorChooser ändern
     farbeLebendigeZelleÄndern.addActionListener(
         new ActionListener() {
           @Override
@@ -100,8 +103,10 @@ public class GameOfLife extends JInternalFrame {
     figuren.add(obszilierend);
     segler = new JMenu("Gleiter und Raumschiffe");
     figuren.add(segler);
-    // Fügt obszilierende Objekte hinzu
+
+    // Fügt Figuren und deren ActionListener hinzu
     blinker = new JMenuItem("Blinker");
+
     blinker.addActionListener(
         new ActionListener() {
           @Override
@@ -205,15 +210,19 @@ public class GameOfLife extends JInternalFrame {
         });
     segler.add(mwss);
 
+    //Fügt Geschwindigkeit hinzu
     geschwindigkeit = new JMenu("Geschwindigkeit");
     menuBar.add(geschwindigkeit);
     langsam = new JMenuItem("Langsam");
     mittel = new JMenuItem("Mittel");
     schnell = new JMenuItem("Schnell");
+
+    //Die Geschwindigkeit kann mit diesen MenuItems geädert werden
     geschwindigkeit.add(langsam);
     geschwindigkeit.add(mittel);
     geschwindigkeit.add(schnell);
 
+    //Wartezeit wird jeweils verändert
     langsam.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -248,8 +257,17 @@ public class GameOfLife extends JInternalFrame {
     setIconifiable(true);
     setMaximizable(true);
     setTitle("Game of Life" + ++fensterzahl);
+
+    //Neuer Thread für jedes Fenster
     new Thread(
             new Runnable() {
+                /**
+                 * Die Run-Methode des Threads beeinhaltet die Logik des Spiels und ändert
+                 * darauf basierend den Zustand (tot, lebendig) der Zelle, allerdings nur,
+                 * wenn der ausgewählte Modus laufen ist.
+                 * Dabei werden bei Zellen im Eck oder an Kanten,
+                 * die auf der anderen Seite berücksichtigt
+                 */
               @Override
               public void run() {
                 // TODO - Beim schließen des Fensters
@@ -262,8 +280,6 @@ public class GameOfLife extends JInternalFrame {
                           int y = j;
                           int lebendeNachbarn = 0;
 
-                          //if(x-1<0) x=gameboard.length - 1;
-                          //if(y-1<0) y=gameboard[i].length - 1;
 
                           //Links
                           Zelle zelle = gameboard[x][y-1<0 ? gameboard[i].length -1 : y-1];
@@ -315,7 +331,7 @@ public class GameOfLife extends JInternalFrame {
                       });
 
                   try {
-                    sleep(warteZeit); //TODO Wartezeit-Button
+                    sleep(warteZeit);
                   } catch (InterruptedException e) {
                     e.printStackTrace();
                   }
@@ -332,6 +348,9 @@ public class GameOfLife extends JInternalFrame {
     popupMenu.show(e.getComponent(), e.getX(), e.getY());
   }
 
+    /**
+     * Setzt alle Zellen auf tot.
+     */
   public void clear() {
     for (int i = 0; i < gameboard.length; i++) {
       for (int j = 0; j < gameboard[i].length; j++) {
@@ -342,6 +361,12 @@ public class GameOfLife extends JInternalFrame {
     }
   }
 
+    /**
+     * Zeichnet die Figuren aufs Brett
+     * @param figur entspricht der Figur, dabei steht eine 1 im Array für eine lebende Zelle
+     *              und eine 0 für eine tote
+     *  Davor werden alle Zellen auf tot gesetzt
+     */
   public void zeichneFigur(int[][] figur) {
     clear();
     for (int i = 0; i < figur.length; i++) {
