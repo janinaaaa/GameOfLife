@@ -295,6 +295,51 @@ public class GameOfLife extends JInternalFrame {
     JLabel ueberschrift;
     GameOfLife game;
 
+    public static int[][] blinker =
+        new int[][] {
+            {0, 1, 0},
+            {0, 1, 0},
+            {0, 1, 0}
+        };
+    public static int[][] uhr =
+        new int[][] {
+            {0, 0, 1, 0, 0, 0},
+            {0, 0, 1, 0, 1, 0},
+            {0, 1, 0, 1, 0, 0},
+            {0, 0, 0, 1, 0, 0}
+        };
+    public static int[][] oktagon =
+        new int[][] {
+            {0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 1, 0},
+            {0, 1, 0, 1, 1, 0, 1},
+            {0, 0, 1, 0, 0, 1, 0},
+            {0, 0, 1, 0, 0, 1, 0},
+            {0, 1, 0, 1, 1, 0, 1},
+            {0, 0, 1, 0, 0, 1, 0}
+        };
+    public static int[][] gleiter =
+        new int[][] {
+            {0, 1, 0},
+            {0, 0, 1},
+            {1, 1, 1}
+        };
+    public static int[][] lwss =
+        new int[][] {
+            {0, 1, 1, 1, 1},
+            {1, 0, 0, 0, 1},
+            {0, 0, 0, 0, 1},
+            {1, 0, 0, 1, 0}
+        };
+    public static int[][] mwss =
+        new int[][] {
+            {0, 1, 1, 1, 1, 1},
+            {1, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 1},
+            {1, 0, 0, 0, 1, 0},
+            {0, 0, 1, 0, 0, 0}
+        };
+
 
 
       FigurWaehlenFenster(GameOfLife game){
@@ -315,17 +360,17 @@ public class GameOfLife extends JInternalFrame {
           figurenContainer = new JPanel(new FlowLayout());
 
           //Figuren
-          figurenContainer.add(new FigurFenster(Figuren.blinker,"Blinker",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new FigurFenster(blinker,"Blinker",FigurWaehlenFenster.this),BorderLayout.CENTER);
           figurenContainer.add(new JPanel());
-          figurenContainer.add(new FigurFenster(Figuren.uhr,"Uhr",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new FigurFenster(uhr,"Uhr",FigurWaehlenFenster.this),BorderLayout.CENTER);
           figurenContainer.add(new JPanel());
-          figurenContainer.add(new FigurFenster(Figuren.oktagon,"Oktagon",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new FigurFenster(oktagon,"Oktagon",FigurWaehlenFenster.this),BorderLayout.CENTER);
           figurenContainer.add(new JPanel());
-          figurenContainer.add(new FigurFenster(Figuren.gleiter,"Gleiter",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new FigurFenster(gleiter,"Gleiter",FigurWaehlenFenster.this),BorderLayout.CENTER);
           figurenContainer.add(new JPanel());
-          figurenContainer.add(new FigurFenster(Figuren.lwss,"Light-Weight Spaceship",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new FigurFenster(lwss,"Light-Weight Spaceship",FigurWaehlenFenster.this),BorderLayout.CENTER);
           figurenContainer.add(new JPanel());
-          figurenContainer.add(new FigurFenster(Figuren.mwss, "Middle-Weight Spaceship",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new FigurFenster(mwss, "Middle-Weight Spaceship",FigurWaehlenFenster.this),BorderLayout.CENTER);
 
 
 
