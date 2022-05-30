@@ -1,12 +1,17 @@
 package gameOfLife;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 
 
 import static java.lang.Thread.sleep;
@@ -28,8 +33,8 @@ public class GameOfLife extends JInternalFrame {
 
   JMenuBar menuBar = new JMenuBar();
 
-  JMenu figuren, obszilierend, segler, geschwindigkeit;
-  JMenuItem blinker, uhr, oktagon, gleiter, lwss, mwss, langsam, mittel, schnell;
+  JMenu figuren, geschwindigkeit;
+  JMenuItem figurenWaehlen, langsam, mittel, schnell;
   // Zeit welche gewartet wird zwischen simulations durchlauf
   int warteZeit = 250;
 
@@ -45,6 +50,15 @@ public class GameOfLife extends JInternalFrame {
     farbeTot = farbeT;
     farbeToteZelleÄndern = new JMenuItem("Farbe: Tote Zellen");
     farbeLebendigeZelleÄndern = new JMenuItem("Farbe: Lebendige Zellen");
+
+    // Spielfeldgröße setzen
+    gameboard = new Zelle[size][size];
+    // Spielfeld mit toten Zellen füllen
+    for (int i = 0; i < gameboard.length; i++) {
+      for (int j = 0; j < gameboard[i].length; j++) {
+        gameboard[i][j] = new Zelle(this);
+      }
+    }
 
     //Man kann die Farben der toten Zellen über einen JColorChooser ändern
     farbeToteZelleÄndern.addActionListener(
@@ -77,14 +91,6 @@ public class GameOfLife extends JInternalFrame {
           }
         });
 
-    // Spielfeldgröße setzen
-    gameboard = new Zelle[size][size];
-    // Spielfeld mit toten Zellen füllen
-    for (int i = 0; i < gameboard.length; i++) {
-      for (int j = 0; j < gameboard[i].length; j++) {
-        gameboard[i][j] = new Zelle(this);
-      }
-    }
 
     // Fügt die Zellen zu dem Layout hinzu
     setLayout(new GridLayout(size, size));
@@ -99,116 +105,16 @@ public class GameOfLife extends JInternalFrame {
     // Fügt Figuren zum Menü hinzu
     figuren = new JMenu("Figuren");
     menuBar.add(figuren);
-    obszilierend = new JMenu("Obszilierende Objekte");
-    figuren.add(obszilierend);
-    segler = new JMenu("Gleiter und Raumschiffe");
-    figuren.add(segler);
+    figurenWaehlen = new JMenuItem("Figuren Wählen");
+    figuren.add(figurenWaehlen);
 
-    // Fügt Figuren und deren ActionListener hinzu
-    blinker = new JMenuItem("Blinker");
-
-    blinker.addActionListener(
+    figurenWaehlen.addActionListener(
         new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
-            int[][] blinker =
-                new int[][] {
-                  {0, 1, 0},
-                  {0, 1, 0},
-                  {0, 1, 0}
-                };
-            zeichneFigur(blinker);
+            new FigurWaehlenFenster(GameOfLife.this);
           }
         });
-    obszilierend.add(blinker);
-    uhr = new JMenuItem("Uhr");
-    uhr.addActionListener(
-        new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            int[][] uhr =
-                new int[][] {
-                  {0, 0, 1, 0, 0, 0},
-                  {0, 0, 1, 0, 1, 0},
-                  {0, 1, 0, 1, 0, 0},
-                  {0, 0, 0, 1, 0, 0}
-                };
-            zeichneFigur(uhr);
-          }
-        });
-    obszilierend.add(uhr);
-
-    oktagon = new JMenuItem("Oktagon");
-    oktagon.addActionListener(
-        new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            int[][] oktagon =
-                new int[][] {
-                  {0, 0, 0, 0, 0, 0, 0},
-                  {0, 0, 1, 0, 0, 1, 0},
-                  {0, 1, 0, 1, 1, 0, 1},
-                  {0, 0, 1, 0, 0, 1, 0},
-                  {0, 0, 1, 0, 0, 1, 0},
-                  {0, 1, 0, 1, 1, 0, 1},
-                  {0, 0, 1, 0, 0, 1, 0}
-                };
-            zeichneFigur(oktagon);
-          }
-        });
-    obszilierend.add(oktagon);
-
-    // Fügt Segler und Raumschiffe hinzu
-    gleiter = new JMenuItem("Gleiter");
-    gleiter.addActionListener(
-        new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            int[][] gleiter =
-                new int[][] {
-                  {0, 1, 0},
-                  {0, 0, 1},
-                  {1, 1, 1}
-                };
-            zeichneFigur(gleiter);
-          }
-        });
-    segler.add(gleiter);
-
-    lwss = new JMenuItem("Light-Weight Spaceship");
-    lwss.addActionListener(
-        new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            int[][] lwss =
-                new int[][] {
-                  {0, 1, 1, 1, 1},
-                  {1, 0, 0, 0, 1},
-                  {0, 0, 0, 0, 1},
-                  {1, 0, 0, 1, 0}
-                };
-            zeichneFigur(lwss);
-          }
-        });
-    segler.add(lwss);
-
-    mwss = new JMenuItem("Middle-Weight Spaceship");
-    mwss.addActionListener(
-        new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            int[][] mwss =
-                new int[][] {
-                  {0, 1, 1, 1, 1, 1},
-                  {1, 0, 0, 0, 0, 1},
-                  {0, 0, 0, 0, 0, 1},
-                  {1, 0, 0, 0, 1, 0},
-                  {0, 0, 1, 0, 0, 0}
-                };
-            zeichneFigur(mwss);
-          }
-        });
-    segler.add(mwss);
 
     //Fügt Geschwindigkeit hinzu
     geschwindigkeit = new JMenu("Geschwindigkeit");
@@ -381,6 +287,115 @@ public class GameOfLife extends JInternalFrame {
           SwingUtilities.updateComponentTreeUI(this);
         }
       }
+    }
+  }
+
+  class FigurWaehlenFenster extends JFrame{
+    JPanel figurenContainer;
+    JLabel ueberschrift;
+    GameOfLife game;
+
+
+
+      FigurWaehlenFenster(GameOfLife game){
+          this.game = game;
+          setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+          Dimension dimension = new Dimension(750,325);
+          setSize(dimension);
+
+          setMinimumSize(dimension);
+          setLocationRelativeTo(null);
+
+          setLayout(new BorderLayout());
+
+          ueberschrift = new JLabel("Spielfigur wählen");
+          ueberschrift.setHorizontalAlignment(SwingConstants.CENTER);
+          add(ueberschrift,BorderLayout.PAGE_START);
+
+          figurenContainer = new JPanel(new FlowLayout());
+
+          //Figuren
+          figurenContainer.add(new FigurFenster(Figuren.blinker,"Blinker",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new JPanel());
+          figurenContainer.add(new FigurFenster(Figuren.uhr,"Uhr",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new JPanel());
+          figurenContainer.add(new FigurFenster(Figuren.oktagon,"Oktagon",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new JPanel());
+          figurenContainer.add(new FigurFenster(Figuren.gleiter,"Gleiter",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new JPanel());
+          figurenContainer.add(new FigurFenster(Figuren.lwss,"Light-Weight Spaceship",FigurWaehlenFenster.this),BorderLayout.CENTER);
+          figurenContainer.add(new JPanel());
+          figurenContainer.add(new FigurFenster(Figuren.mwss, "Middle-Weight Spaceship",FigurWaehlenFenster.this),BorderLayout.CENTER);
+
+
+
+          add(figurenContainer);
+
+          pack();
+          setResizable(false);
+          setVisible(true);
+          setAlwaysOnTop(true);
+      }
+
+  }
+
+  public class FigurFenster extends JPanel {
+    int[][] data;
+    JPanel contentPanel;
+    JLabel beschriftung;
+    FigurWaehlenFenster parent;
+
+    FigurFenster(int[][] data, String name, FigurWaehlenFenster parent) {
+      this.parent = parent;
+      this.data = data;
+
+      addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          super.mouseClicked(e);
+          FigurFenster.this.parent.game.zeichneFigur(FigurFenster.this.data);
+          parent.dispose();
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+          super.mouseEntered(e);
+          setBorder(new BevelBorder(BevelBorder.LOWERED));
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+          super.mouseExited(e);
+          setBorder(new BevelBorder(BevelBorder.RAISED) );
+        }
+      });
+
+
+      Dimension dimension = new Dimension(100, 100);
+      setLayout(new BorderLayout());
+      contentPanel = new JPanel(new GridLayout(data.length, data[0].length));
+      contentPanel.setPreferredSize(dimension);
+      add(contentPanel, BorderLayout.CENTER);
+
+      beschriftung = new JLabel(name);
+      beschriftung.setHorizontalAlignment(SwingConstants.CENTER);
+      add(beschriftung,BorderLayout.PAGE_END);
+
+      for (int[] i : this.data) {
+        for (int j : i) {
+          JPanel zelle = new JPanel();
+          zelle.setBorder(new LineBorder(Color.black));
+          if (j == 1) {
+            zelle.setBackground(this.parent.game.farbeLebendig);
+          }
+          if (j == 0) {
+            zelle.setBackground(this.parent.game.farbeTot);
+          }
+          contentPanel.add(zelle);
+        }
+      }
+
+      setBorder(new BevelBorder(BevelBorder.RAISED) );
     }
   }
 }
