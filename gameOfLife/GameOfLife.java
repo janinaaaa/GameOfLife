@@ -105,7 +105,7 @@ public class GameOfLife extends JInternalFrame {
     // Fügt Figuren zum Menü hinzu
     figuren = new JMenu("Figuren");
     menuBar.add(figuren);
-    figurenWaehlen = new JMenuItem("Figuren Wählen");
+    figurenWaehlen = new JMenuItem("Figuren wählen");
     figuren.add(figurenWaehlen);
 
     figurenWaehlen.addActionListener(
@@ -310,13 +310,14 @@ public class GameOfLife extends JInternalFrame {
         };
     public static int[][] oktagon =
         new int[][] {
-            {0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 1, 0},
-            {0, 1, 0, 1, 1, 0, 1},
-            {0, 0, 1, 0, 0, 1, 0},
-            {0, 0, 1, 0, 0, 1, 0},
-            {0, 1, 0, 1, 1, 0, 1},
-            {0, 0, 1, 0, 0, 1, 0}
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 1, 0, 0},
+            {0, 1, 0, 1, 1, 0, 1, 0},
+            {0, 0, 1, 0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0, 1, 0, 0},
+            {0, 1, 0, 1, 1, 0, 1, 0},
+            {0, 0, 1, 0, 0, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0}
         };
     public static int[][] gleiter =
         new int[][] {
@@ -393,6 +394,8 @@ public class GameOfLife extends JInternalFrame {
     FigurFenster(int[][] data, String name, FigurWaehlenFenster parent) {
       this.parent = parent;
       this.data = data;
+
+      GameOfLifeGUI.ausgewaehlterModus = States.SETZEN;
 
       addMouseListener(new MouseAdapter() {
         @Override
