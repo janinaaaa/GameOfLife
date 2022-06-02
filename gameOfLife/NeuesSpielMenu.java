@@ -15,10 +15,11 @@ import java.awt.event.ActionListener;
  */
 
 public class NeuesSpielMenu extends JFrame {
-    JLabel groesseText, farbeTotText, farbeLebendigText;
-    JSlider groesseWaehlen;
+    JLabel zeilenText, spaltenText, farbeTotText, farbeLebendigText;
+    JSlider zeilenanzahl, spaltenanzahl;
     JButton farbeTotWaehlen, farbeLebendigWaehlen, bestaetigen;
-    int size = 8;
+    int zeilen = 8;
+    int spalten = 8;
     GameOfLifeGUI gui;
     Color farbeLebendig, farbeTot;
 
@@ -32,20 +33,36 @@ public class NeuesSpielMenu extends JFrame {
         setResizable(false);
         gui = parentGUI;
         setLayout(new FlowLayout());
-        groesseText = new JLabel("Größe auswählen: ");
-        add(groesseText);
-        groesseWaehlen = new JSlider(SwingConstants.HORIZONTAL, 8, 15, 8);
+        zeilenText = new JLabel("Anzahl Zeilen auswählen");
+        add(zeilenText);
 
-        //Slider, um die Größe zu wählen
-        groesseWaehlen.setMinorTickSpacing(1);
-        groesseWaehlen.setMajorTickSpacing(1);
-        groesseWaehlen.setPaintTicks(true);
-        groesseWaehlen.setPaintLabels(true);
-        add(groesseWaehlen);
-        groesseWaehlen.addChangeListener(new ChangeListener() {
+        zeilenanzahl = new JSlider(SwingConstants.HORIZONTAL, 8, 15, 8);
+        zeilenanzahl.setMinorTickSpacing(1);
+        zeilenanzahl.setMajorTickSpacing(1);
+        zeilenanzahl.setPaintTicks(true);
+        zeilenanzahl.setPaintLabels(true);
+        add(zeilenanzahl);
+        zeilenanzahl.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                size = groesseWaehlen.getValue();
+                zeilen = zeilenanzahl.getValue();
+            }
+        });
+
+        spaltenText = new JLabel("Anzahl Spalten auswählen: ");
+        add(spaltenText);
+        spaltenanzahl = new JSlider(SwingConstants.HORIZONTAL, 8, 15, 8);
+
+        //Slider, um die Größe zu wählen
+        spaltenanzahl.setMinorTickSpacing(1);
+        spaltenanzahl.setMajorTickSpacing(1);
+        spaltenanzahl.setPaintTicks(true);
+        spaltenanzahl.setPaintLabels(true);
+        add(spaltenanzahl);
+        spaltenanzahl.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                spalten = spaltenanzahl.getValue();
             }
         });
 
@@ -98,7 +115,7 @@ public class NeuesSpielMenu extends JFrame {
         bestaetigen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameOfLife game = new GameOfLife(size, farbeLebendig, farbeTot);
+                GameOfLife game = new GameOfLife(zeilen, spalten, farbeLebendig, farbeTot);
                 game.setSize(new Dimension(250,250));
                 game.setVisible(true);
                 setLocationRelativeTo(null);

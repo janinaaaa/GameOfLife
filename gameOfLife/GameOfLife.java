@@ -41,18 +41,19 @@ public class GameOfLife extends JInternalFrame {
   /**
    * Konstruktor von Game of Life
    *
-   * @param size Die Größe des Spielfeldes von Game of Life
+   * @param sizeZeilen,
+   * @param sizeSpalten Die Größe des Spielfeldes von Game of Life
    * @param farbeL Farbe der ebendigen Zellen
    * @param farbeT Farbe der toten Zellen
    */
-  GameOfLife(int size, Color farbeL, Color farbeT) {
+  GameOfLife(int sizeZeilen, int sizeSpalten, Color farbeL, Color farbeT) {
     farbeLebendig = farbeL;
     farbeTot = farbeT;
     farbeToteZelleÄndern = new JMenuItem("Farbe: Tote Zellen");
     farbeLebendigeZelleÄndern = new JMenuItem("Farbe: Lebendige Zellen");
 
     // Spielfeldgröße setzen
-    gameboard = new Zelle[size][size];
+    gameboard = new Zelle[sizeZeilen][sizeSpalten];
     // Spielfeld mit toten Zellen füllen
     for (int i = 0; i < gameboard.length; i++) {
       for (int j = 0; j < gameboard[i].length; j++) {
@@ -93,7 +94,7 @@ public class GameOfLife extends JInternalFrame {
 
 
     // Fügt die Zellen zu dem Layout hinzu
-    setLayout(new GridLayout(size, size));
+    setLayout(new GridLayout(sizeZeilen, sizeSpalten));
     for (int i = 0; i < gameboard.length; i++) {
       for (int j = 0; j < gameboard[i].length; j++) {
         getContentPane().add(gameboard[i][j]);
