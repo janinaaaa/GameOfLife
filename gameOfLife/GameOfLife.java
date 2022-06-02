@@ -43,7 +43,7 @@ public class GameOfLife extends JInternalFrame {
    *
    * @param sizeZeilen,
    * @param sizeSpalten Die Größe des Spielfeldes von Game of Life
-   * @param farbeL Farbe der ebendigen Zellen
+   * @param farbeL Farbe der lebendigen Zellen
    * @param farbeT Farbe der toten Zellen
    */
   GameOfLife(int sizeZeilen, int sizeSpalten, Color farbeL, Color farbeT) {
@@ -291,25 +291,34 @@ public class GameOfLife extends JInternalFrame {
     }
   }
 
+  /**
+   * Ein Fenster welches angezeigt wird wenn man eine Figur laden möchte.
+   */
   class FigurWaehlenFenster extends JFrame{
+    //Layout Komponenten
     JPanel figurenContainer;
     JLabel ueberschrift;
+    //Parent GameObjekt
     GameOfLife game;
 
-    public static int[][] blinker =
+    //Alle Figuren als int Schablone,
+    // 1 = am Leben,
+    // 0 = tot
+
+    static int[][] blinker =
         new int[][] {
             {0, 1, 0},
             {0, 1, 0},
             {0, 1, 0}
         };
-    public static int[][] uhr =
+    static int[][] uhr =
         new int[][] {
             {0, 0, 1, 0, 0, 0},
             {0, 0, 1, 0, 1, 0},
             {0, 1, 0, 1, 0, 0},
             {0, 0, 0, 1, 0, 0}
         };
-    public static int[][] oktagon =
+    static int[][] oktagon =
         new int[][] {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 1, 0, 0, 1, 0, 0},
@@ -320,20 +329,20 @@ public class GameOfLife extends JInternalFrame {
             {0, 0, 1, 0, 0, 1, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0}
         };
-    public static int[][] gleiter =
+    static int[][] gleiter =
         new int[][] {
             {0, 1, 0},
             {0, 0, 1},
             {1, 1, 1}
         };
-    public static int[][] lwss =
+    static int[][] lwss =
         new int[][] {
             {0, 1, 1, 1, 1},
             {1, 0, 0, 0, 1},
             {0, 0, 0, 0, 1},
             {1, 0, 0, 1, 0}
         };
-    public static int[][] mwss =
+    static int[][] mwss =
         new int[][] {
             {0, 1, 1, 1, 1, 1},
             {1, 0, 0, 0, 0, 1},
@@ -343,22 +352,29 @@ public class GameOfLife extends JInternalFrame {
         };
 
 
-
+    /**
+     * Konstruktor für Figuren wählen Fenster, es wird das Fenster erstellt mit allen Figuren.
+     * @param game Das parent game in welchem das Fenster geöffnet wurde.
+     */
       FigurWaehlenFenster(GameOfLife game){
+          // Zuweisung Parent game, Setup
           this.game = game;
-          setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-          Dimension dimension = new Dimension(750,325);
-          setSize(dimension);
 
-          setMinimumSize(dimension);
+          // Close operator wird gesetzt
+          setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+          // Fenster wird mittig ausgerichtet auf dem Bildschirm
           setLocationRelativeTo(null);
 
+          //Layout wird als BorderLayout festgelegt
           setLayout(new BorderLayout());
 
+          // Überschrift erstellt
           ueberschrift = new JLabel("Spielfigur wählen");
           ueberschrift.setHorizontalAlignment(SwingConstants.CENTER);
           add(ueberschrift,BorderLayout.PAGE_START);
 
+          // Container für Figuren erstellt
           figurenContainer = new JPanel(new FlowLayout());
 
           //Figuren
@@ -375,10 +391,13 @@ public class GameOfLife extends JInternalFrame {
           figurenContainer.add(new FigurFenster(mwss, "Middle-Weight Spaceship",FigurWaehlenFenster.this),BorderLayout.CENTER);
 
 
-
+          // Figuren Container hinzufügen zu Fenster
           add(figurenContainer);
 
+          // Fenster einpassen automatisch
           pack();
+
+          // Setup
           setResizable(false);
           setVisible(true);
           setAlwaysOnTop(true);
@@ -386,18 +405,32 @@ public class GameOfLife extends JInternalFrame {
 
   }
 
+  /**
+   * Repraesentiert einzelne Figur im Figuren waehlen Fenster mit Beschriftung
+   */
   public class FigurFenster extends JPanel {
+     // Schablone 1 = am leben, 0 = tot
     int[][] data;
+    // Layout Komponenten
     JPanel contentPanel;
     JLabel beschriftung;
+    // Parent Objekt
     FigurWaehlenFenster parent;
 
+    /**
+     * Konstruktor es wird ein neue Figur erstellt aus einer int Schablone.
+     * @param data Integer Schablone aus welcher die Zellen generiert werden.
+     * @param name  Name und Beschriftung der Figur
+     * @param parent  Parent Objekt der Figur
+     */
     FigurFenster(int[][] data, String name, FigurWaehlenFenster parent) {
       this.parent = parent;
       this.data = data;
-
+      //Modus wird auf Setzen gesetzt damit das Spiel beim aufbauen der Figur nicht weiterläuft
       GameOfLifeGUI.ausgewaehlterModus = States.SETZEN;
 
+      // Listener wodurch bei klick auf Grafik die Figur aufgebaut wird
+      // und das Fenster geschlossen
       addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -406,6 +439,7 @@ public class GameOfLife extends JInternalFrame {
           parent.dispose();
         }
 
+        // Hover Effekt für die Figuren, indem die Border verändert wird
         @Override
         public void mouseEntered(MouseEvent e) {
           super.mouseEntered(e);
@@ -419,17 +453,22 @@ public class GameOfLife extends JInternalFrame {
         }
       });
 
+      // Alle Borders werden standardmäßig auf raised gesetzt
+      setBorder(new BevelBorder(BevelBorder.RAISED) );
 
+      // Layout Einstellungen für das Fenster in welchem die Figur dargestellt wird.
       Dimension dimension = new Dimension(100, 100);
       setLayout(new BorderLayout());
       contentPanel = new JPanel(new GridLayout(data.length, data[0].length));
       contentPanel.setPreferredSize(dimension);
       add(contentPanel, BorderLayout.CENTER);
 
+      // Beschriftung der Figur
       beschriftung = new JLabel(name);
       beschriftung.setHorizontalAlignment(SwingConstants.CENTER);
       add(beschriftung,BorderLayout.PAGE_END);
 
+      // Zellen werden nach dem data Schema generiert und dem Figur-Fenster hinzugefügt
       for (int[] i : this.data) {
         for (int j : i) {
           JPanel zelle = new JPanel();
@@ -443,8 +482,6 @@ public class GameOfLife extends JInternalFrame {
           contentPanel.add(zelle);
         }
       }
-
-      setBorder(new BevelBorder(BevelBorder.RAISED) );
     }
   }
 }
