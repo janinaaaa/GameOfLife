@@ -7,11 +7,15 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ContainerAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 
 import static java.lang.Thread.sleep;
@@ -30,6 +34,8 @@ public class GameOfLife extends JInternalFrame {
   JMenuItem farbeLebendigeZelleÄndern;
   static int fensterzahl;
   JPopupMenu popupMenu;
+  // Fenster geschlossen muss den Thread stoppen
+  boolean closed;
 
   JMenuBar menuBar = new JMenuBar();
 
@@ -47,6 +53,7 @@ public class GameOfLife extends JInternalFrame {
    * @param farbeT Farbe der toten Zellen
    */
   GameOfLife(int sizeZeilen, int sizeSpalten, Color farbeL, Color farbeT) {
+    closed = false;
     farbeLebendig = farbeL;
     farbeTot = farbeT;
     farbeToteZelleÄndern = new JMenuItem("Farbe: Tote Zellen");
@@ -67,7 +74,6 @@ public class GameOfLife extends JInternalFrame {
           @Override
           public void actionPerformed(ActionEvent e) {
             farbeTot = JColorChooser.showDialog(null, "Farbe für tote Zelle auswählen", farbeTot);
-            System.out.println(farbeTot);
             for (int i = 0; i < gameboard.length; i++) {
               for (int j = 0; j < gameboard[i].length; j++) {
                 gameboard[i][j].updateColor();
@@ -165,72 +171,80 @@ public class GameOfLife extends JInternalFrame {
     setMaximizable(true);
     setTitle("Game of Life" + ++fensterzahl);
 
-    //Neuer Thread für jedes Fenster
+    addInternalFrameListener(new InternalFrameAdapter() {
+      @Override
+      public void internalFrameClosing(InternalFrameEvent e) {
+        super.internalFrameClosing(e);
+        closed = true;
+      }
+    });
+
+    // Neuer Thread für jedes Fenster
     new Thread(
             new Runnable() {
-                /**
-                 * Die Run-Methode des Threads beeinhaltet die Logik des Spiels und ändert
-                 * darauf basierend den Zustand (tot, lebendig) der Zelle, allerdings nur,
-                 * wenn der ausgewählte Modus laufen ist.
-                 * Dabei werden bei Zellen im Eck oder an Kanten,
-                 * die auf der anderen Seite berücksichtigt
-                 */
+              /**
+               * Die Run-Methode des Threads beeinhaltet die Logik des Spiels und ändert darauf
+               * basierend den Zustand (tot, lebendig) der Zelle, allerdings nur, wenn der
+               * ausgewählte Modus laufen ist. Dabei werden bei Zellen im Eck oder an Kanten, die
+               * auf der anderen Seite berücksichtigt
+               */
               @Override
               public void run() {
-                // TODO - Beim schließen des Fensters
-                //  wird der Thread nicht beendet
-                while (true) {
-                  if (GameOfLifeGUI.ausgewaehlterModus == States.LAUFEN){
+                while (!closed) {
+                  if (GameOfLifeGUI.ausgewaehlterModus == States.LAUFEN) {
                     for (int i = 0; i < gameboard.length; i++) {
                       for (int j = 0; j < gameboard[i].length; j++) {
-                          int x = i;
-                          int y = j;
-                          int lebendeNachbarn = 0;
+                        int x = i;
+                        int y = j;
+                        int lebendeNachbarn = 0;
 
+                        // Links
+                        Zelle zelle = gameboard[x][y - 1 < 0 ? gameboard[i].length - 1 : y - 1];
+                        // Rechts
+                        Zelle zelle2 = gameboard[x][(y + 1) % gameboard[i].length];
+                        // Oben
+                        Zelle zelle3 = gameboard[x - 1 < 0 ? gameboard.length - 1 : x - 1][y];
+                        // Unten
+                        Zelle zelle4 = gameboard[(x + 1) % gameboard.length][y];
+                        // Rechtsoben
+                        Zelle zelle5 =
+                            gameboard[x - 1 < 0 ? gameboard.length - 1 : x - 1][
+                                (y + 1) % gameboard[i].length];
+                        // Rechtsunten
+                        Zelle zelle6 =
+                            gameboard[(x + 1) % gameboard.length][(y + 1) % gameboard[i].length];
+                        // Linksoben
+                        Zelle zelle7 =
+                            gameboard[x - 1 < 0 ? gameboard.length - 1 : x - 1][
+                                y - 1 < 0 ? gameboard[i].length - 1 : y - 1];
+                        // Linksunten
+                        Zelle zelle8 =
+                            gameboard[(x + 1) % gameboard.length][
+                                y - 1 < 0 ? gameboard[i].length - 1 : y - 1];
 
-                          //Links
-                          Zelle zelle = gameboard[x][y-1<0 ? gameboard[i].length -1 : y-1];
-                          //Rechts
-                          Zelle zelle2 = gameboard[x][(y + 1) % gameboard[i].length];
-                          //Oben
-                          Zelle zelle3 = gameboard[x-1<0 ? gameboard.length-1 : x-1][y];
-                          //Unten
-                          Zelle zelle4 = gameboard[(x + 1) % gameboard.length][y];
-                          //Rechtsoben
-                          Zelle zelle5 = gameboard[x-1<0 ? gameboard.length-1 : x-1][(y + 1) % gameboard[i].length];
-                          //Rechtsunten
-                          Zelle zelle6 = gameboard[(x + 1) % gameboard.length][(y + 1) % gameboard[i].length];
-                          //Linksoben
-                          Zelle zelle7 = gameboard[x-1<0 ? gameboard.length-1 : x-1][y-1<0 ? gameboard[i].length-1 : y-1];
-                          //Linksunten
-                          Zelle zelle8 = gameboard[(x + 1) % gameboard.length][y-1<0 ? gameboard[i].length-1 : y-1];
+                        if (zelle.isAlive) lebendeNachbarn += 1;
+                        if (zelle2.isAlive) lebendeNachbarn += 1;
+                        if (zelle3.isAlive) lebendeNachbarn += 1;
+                        if (zelle4.isAlive) lebendeNachbarn += 1;
+                        if (zelle5.isAlive) lebendeNachbarn += 1;
+                        if (zelle6.isAlive) lebendeNachbarn += 1;
+                        if (zelle7.isAlive) lebendeNachbarn += 1;
+                        if (zelle8.isAlive) lebendeNachbarn += 1;
 
-                          if (zelle.isAlive) lebendeNachbarn += 1;
-                          if (zelle2.isAlive) lebendeNachbarn += 1;
-                          if (zelle3.isAlive) lebendeNachbarn += 1;
-                          if (zelle4.isAlive) lebendeNachbarn += 1;
-                          if (zelle5.isAlive) lebendeNachbarn += 1;
-                          if (zelle6.isAlive) lebendeNachbarn += 1;
-                          if (zelle7.isAlive) lebendeNachbarn += 1;
-                          if (zelle8.isAlive) lebendeNachbarn += 1;
-
-                          if (lebendeNachbarn == 3 && !gameboard[i][j].isAlive) gameboard[i][j].lebendigSetzen = true;
-                          else if ((lebendeNachbarn == 2 || lebendeNachbarn == 3) && gameboard[i][j].isAlive)
-                              gameboard[i][j].lebendigSetzen = true;
-                          else gameboard[i][j].lebendigSetzen = false;
-
+                        if (lebendeNachbarn == 3 && !gameboard[i][j].isAlive)
+                          gameboard[i][j].lebendigSetzen = true;
+                        else if ((lebendeNachbarn == 2 || lebendeNachbarn == 3)
+                            && gameboard[i][j].isAlive) gameboard[i][j].lebendigSetzen = true;
+                        else gameboard[i][j].lebendigSetzen = false;
                       }
                     }
-                      for (Zelle[] zellen : gameboard) {
-                          for (Zelle zelle : zellen) {
-                              zelle.isAlive = zelle.lebendigSetzen;
-                              zelle.updateColor();
-                          }
+                    for (Zelle[] zellen : gameboard) {
+                      for (Zelle zelle : zellen) {
+                        zelle.isAlive = zelle.lebendigSetzen;
+                        zelle.updateColor();
                       }
-
+                    }
                   }
-
-
 
                   SwingUtilities.invokeLater(
                       () -> {
