@@ -80,7 +80,7 @@ public class NeuesSpielMenu extends JFrame {
           public void actionPerformed(ActionEvent e) {
               Color gewählteFarbe = JColorChooser.showDialog(null, "Farbe Tot Wählen", farbeTotWaehlen.getBackground());
 
-              // Wenn das Fenster geschlossen ist soll die alte Farbe behalten werden
+              // Wenn das Fenster geschlossen ist, soll die alte Farbe behalten werden
               if(gewählteFarbe != null) {
                   farbeTot = gewählteFarbe;
                   farbeTotWaehlen.setBackground(farbeTot);
