@@ -7,11 +7,15 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ContainerAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 
 import static java.lang.Thread.sleep;
@@ -30,6 +34,8 @@ public class GameOfLife extends JInternalFrame {
   JMenuItem farbeLebendigeZelleÄndern;
   static int fensterzahl;
   JPopupMenu popupMenu;
+  // Fenster geschlossen muss den Thread stoppen
+  boolean closed;
 
   JMenuBar menuBar = new JMenuBar();
 
@@ -43,10 +49,11 @@ public class GameOfLife extends JInternalFrame {
    *
    * @param sizeZeilen,
    * @param sizeSpalten Die Größe des Spielfeldes von Game of Life
-   * @param farbeL Farbe der ebendigen Zellen
+   * @param farbeL Farbe der lebendigen Zellen
    * @param farbeT Farbe der toten Zellen
    */
   GameOfLife(int sizeZeilen, int sizeSpalten, Color farbeL, Color farbeT) {
+    closed = false;
     farbeLebendig = farbeL;
     farbeTot = farbeT;
     farbeToteZelleÄndern = new JMenuItem("Farbe: Tote Zellen");
@@ -67,7 +74,6 @@ public class GameOfLife extends JInternalFrame {
           @Override
           public void actionPerformed(ActionEvent e) {
             farbeTot = JColorChooser.showDialog(null, "Farbe für tote Zelle auswählen", farbeTot);
-            System.out.println(farbeTot);
             for (int i = 0; i < gameboard.length; i++) {
               for (int j = 0; j < gameboard[i].length; j++) {
                 gameboard[i][j].updateColor();
@@ -165,72 +171,80 @@ public class GameOfLife extends JInternalFrame {
     setMaximizable(true);
     setTitle("Game of Life" + ++fensterzahl);
 
-    //Neuer Thread für jedes Fenster
+    addInternalFrameListener(new InternalFrameAdapter() {
+      @Override
+      public void internalFrameClosing(InternalFrameEvent e) {
+        super.internalFrameClosing(e);
+        closed = true;
+      }
+    });
+
+    // Neuer Thread für jedes Fenster
     new Thread(
             new Runnable() {
-                /**
-                 * Die Run-Methode des Threads beeinhaltet die Logik des Spiels und ändert
-                 * darauf basierend den Zustand (tot, lebendig) der Zelle, allerdings nur,
-                 * wenn der ausgewählte Modus laufen ist.
-                 * Dabei werden bei Zellen im Eck oder an Kanten,
-                 * die auf der anderen Seite berücksichtigt
-                 */
+              /**
+               * Die Run-Methode des Threads beeinhaltet die Logik des Spiels und ändert darauf
+               * basierend den Zustand (tot, lebendig) der Zelle, allerdings nur, wenn der
+               * ausgewählte Modus laufen ist. Dabei werden bei Zellen im Eck oder an Kanten, die
+               * auf der anderen Seite berücksichtigt
+               */
               @Override
               public void run() {
-                // TODO - Beim schließen des Fensters
-                //  wird der Thread nicht beendet
-                while (true) {
-                  if (GameOfLifeGUI.ausgewaehlterModus == States.LAUFEN){
+                while (!closed) {
+                  if (GameOfLifeGUI.ausgewaehlterModus == States.LAUFEN) {
                     for (int i = 0; i < gameboard.length; i++) {
                       for (int j = 0; j < gameboard[i].length; j++) {
-                          int x = i;
-                          int y = j;
-                          int lebendeNachbarn = 0;
+                        int x = i;
+                        int y = j;
+                        int lebendeNachbarn = 0;
 
+                        // Links
+                        Zelle zelle = gameboard[x][y - 1 < 0 ? gameboard[i].length - 1 : y - 1];
+                        // Rechts
+                        Zelle zelle2 = gameboard[x][(y + 1) % gameboard[i].length];
+                        // Oben
+                        Zelle zelle3 = gameboard[x - 1 < 0 ? gameboard.length - 1 : x - 1][y];
+                        // Unten
+                        Zelle zelle4 = gameboard[(x + 1) % gameboard.length][y];
+                        // Rechtsoben
+                        Zelle zelle5 =
+                            gameboard[x - 1 < 0 ? gameboard.length - 1 : x - 1][
+                                (y + 1) % gameboard[i].length];
+                        // Rechtsunten
+                        Zelle zelle6 =
+                            gameboard[(x + 1) % gameboard.length][(y + 1) % gameboard[i].length];
+                        // Linksoben
+                        Zelle zelle7 =
+                            gameboard[x - 1 < 0 ? gameboard.length - 1 : x - 1][
+                                y - 1 < 0 ? gameboard[i].length - 1 : y - 1];
+                        // Linksunten
+                        Zelle zelle8 =
+                            gameboard[(x + 1) % gameboard.length][
+                                y - 1 < 0 ? gameboard[i].length - 1 : y - 1];
 
-                          //Links
-                          Zelle zelle = gameboard[x][y-1<0 ? gameboard[i].length -1 : y-1];
-                          //Rechts
-                          Zelle zelle2 = gameboard[x][(y + 1) % gameboard[i].length];
-                          //Oben
-                          Zelle zelle3 = gameboard[x-1<0 ? gameboard.length-1 : x-1][y];
-                          //Unten
-                          Zelle zelle4 = gameboard[(x + 1) % gameboard.length][y];
-                          //Rechtsoben
-                          Zelle zelle5 = gameboard[x-1<0 ? gameboard.length-1 : x-1][(y + 1) % gameboard[i].length];
-                          //Rechtsunten
-                          Zelle zelle6 = gameboard[(x + 1) % gameboard.length][(y + 1) % gameboard[i].length];
-                          //Linksoben
-                          Zelle zelle7 = gameboard[x-1<0 ? gameboard.length-1 : x-1][y-1<0 ? gameboard[i].length-1 : y-1];
-                          //Linksunten
-                          Zelle zelle8 = gameboard[(x + 1) % gameboard.length][y-1<0 ? gameboard[i].length-1 : y-1];
+                        if (zelle.isAlive) lebendeNachbarn += 1;
+                        if (zelle2.isAlive) lebendeNachbarn += 1;
+                        if (zelle3.isAlive) lebendeNachbarn += 1;
+                        if (zelle4.isAlive) lebendeNachbarn += 1;
+                        if (zelle5.isAlive) lebendeNachbarn += 1;
+                        if (zelle6.isAlive) lebendeNachbarn += 1;
+                        if (zelle7.isAlive) lebendeNachbarn += 1;
+                        if (zelle8.isAlive) lebendeNachbarn += 1;
 
-                          if (zelle.isAlive) lebendeNachbarn += 1;
-                          if (zelle2.isAlive) lebendeNachbarn += 1;
-                          if (zelle3.isAlive) lebendeNachbarn += 1;
-                          if (zelle4.isAlive) lebendeNachbarn += 1;
-                          if (zelle5.isAlive) lebendeNachbarn += 1;
-                          if (zelle6.isAlive) lebendeNachbarn += 1;
-                          if (zelle7.isAlive) lebendeNachbarn += 1;
-                          if (zelle8.isAlive) lebendeNachbarn += 1;
-
-                          if (lebendeNachbarn == 3 && !gameboard[i][j].isAlive) gameboard[i][j].lebendigSetzen = true;
-                          else if ((lebendeNachbarn == 2 || lebendeNachbarn == 3) && gameboard[i][j].isAlive)
-                              gameboard[i][j].lebendigSetzen = true;
-                          else gameboard[i][j].lebendigSetzen = false;
-
+                        if (lebendeNachbarn == 3 && !gameboard[i][j].isAlive)
+                          gameboard[i][j].lebendigSetzen = true;
+                        else if ((lebendeNachbarn == 2 || lebendeNachbarn == 3)
+                            && gameboard[i][j].isAlive) gameboard[i][j].lebendigSetzen = true;
+                        else gameboard[i][j].lebendigSetzen = false;
                       }
                     }
-                      for (Zelle[] zellen : gameboard) {
-                          for (Zelle zelle : zellen) {
-                              zelle.isAlive = zelle.lebendigSetzen;
-                              zelle.updateColor();
-                          }
+                    for (Zelle[] zellen : gameboard) {
+                      for (Zelle zelle : zellen) {
+                        zelle.isAlive = zelle.lebendigSetzen;
+                        zelle.updateColor();
                       }
-
+                    }
                   }
-
-
 
                   SwingUtilities.invokeLater(
                       () -> {
@@ -291,25 +305,34 @@ public class GameOfLife extends JInternalFrame {
     }
   }
 
+  /**
+   * Ein Fenster welches angezeigt wird wenn man eine Figur laden möchte.
+   */
   class FigurWaehlenFenster extends JFrame{
+    //Layout Komponenten
     JPanel figurenContainer;
     JLabel ueberschrift;
+    //Parent GameObjekt
     GameOfLife game;
 
-    public static int[][] blinker =
+    //Alle Figuren als int Schablone,
+    // 1 = am Leben,
+    // 0 = tot
+
+    static int[][] blinker =
         new int[][] {
             {0, 1, 0},
             {0, 1, 0},
             {0, 1, 0}
         };
-    public static int[][] uhr =
+    static int[][] uhr =
         new int[][] {
             {0, 0, 1, 0, 0, 0},
             {0, 0, 1, 0, 1, 0},
             {0, 1, 0, 1, 0, 0},
             {0, 0, 0, 1, 0, 0}
         };
-    public static int[][] oktagon =
+    static int[][] oktagon =
         new int[][] {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 1, 0, 0, 1, 0, 0},
@@ -320,20 +343,20 @@ public class GameOfLife extends JInternalFrame {
             {0, 0, 1, 0, 0, 1, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0}
         };
-    public static int[][] gleiter =
+    static int[][] gleiter =
         new int[][] {
             {0, 1, 0},
             {0, 0, 1},
             {1, 1, 1}
         };
-    public static int[][] lwss =
+    static int[][] lwss =
         new int[][] {
             {0, 1, 1, 1, 1},
             {1, 0, 0, 0, 1},
             {0, 0, 0, 0, 1},
             {1, 0, 0, 1, 0}
         };
-    public static int[][] mwss =
+    static int[][] mwss =
         new int[][] {
             {0, 1, 1, 1, 1, 1},
             {1, 0, 0, 0, 0, 1},
@@ -343,22 +366,29 @@ public class GameOfLife extends JInternalFrame {
         };
 
 
-
+    /**
+     * Konstruktor für Figuren wählen Fenster, es wird das Fenster erstellt mit allen Figuren.
+     * @param game Das parent game in welchem das Fenster geöffnet wurde.
+     */
       FigurWaehlenFenster(GameOfLife game){
+          // Zuweisung Parent game, Setup
           this.game = game;
-          setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-          Dimension dimension = new Dimension(750,325);
-          setSize(dimension);
 
-          setMinimumSize(dimension);
+          // Close operator wird gesetzt
+          setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+          // Fenster wird mittig ausgerichtet auf dem Bildschirm
           setLocationRelativeTo(null);
 
+          //Layout wird als BorderLayout festgelegt
           setLayout(new BorderLayout());
 
+          // Überschrift erstellt
           ueberschrift = new JLabel("Spielfigur wählen");
           ueberschrift.setHorizontalAlignment(SwingConstants.CENTER);
           add(ueberschrift,BorderLayout.PAGE_START);
 
+          // Container für Figuren erstellt
           figurenContainer = new JPanel(new FlowLayout());
 
           //Figuren
@@ -375,10 +405,13 @@ public class GameOfLife extends JInternalFrame {
           figurenContainer.add(new FigurFenster(mwss, "Middle-Weight Spaceship",FigurWaehlenFenster.this),BorderLayout.CENTER);
 
 
-
+          // Figuren Container hinzufügen zu Fenster
           add(figurenContainer);
 
+          // Fenster einpassen automatisch
           pack();
+
+          // Setup
           setResizable(false);
           setVisible(true);
           setAlwaysOnTop(true);
@@ -386,18 +419,32 @@ public class GameOfLife extends JInternalFrame {
 
   }
 
+  /**
+   * Repraesentiert einzelne Figur im Figuren waehlen Fenster mit Beschriftung
+   */
   public class FigurFenster extends JPanel {
+     // Schablone 1 = am leben, 0 = tot
     int[][] data;
+    // Layout Komponenten
     JPanel contentPanel;
     JLabel beschriftung;
+    // Parent Objekt
     FigurWaehlenFenster parent;
 
+    /**
+     * Konstruktor es wird ein neue Figur erstellt aus einer int Schablone.
+     * @param data Integer Schablone aus welcher die Zellen generiert werden.
+     * @param name  Name und Beschriftung der Figur
+     * @param parent  Parent Objekt der Figur
+     */
     FigurFenster(int[][] data, String name, FigurWaehlenFenster parent) {
       this.parent = parent;
       this.data = data;
-
+      //Modus wird auf Setzen gesetzt damit das Spiel beim aufbauen der Figur nicht weiterläuft
       GameOfLifeGUI.ausgewaehlterModus = States.SETZEN;
 
+      // Listener wodurch bei klick auf Grafik die Figur aufgebaut wird
+      // und das Fenster geschlossen
       addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -406,6 +453,7 @@ public class GameOfLife extends JInternalFrame {
           parent.dispose();
         }
 
+        // Hover Effekt für die Figuren, indem die Border verändert wird
         @Override
         public void mouseEntered(MouseEvent e) {
           super.mouseEntered(e);
@@ -419,17 +467,22 @@ public class GameOfLife extends JInternalFrame {
         }
       });
 
+      // Alle Borders werden standardmäßig auf raised gesetzt
+      setBorder(new BevelBorder(BevelBorder.RAISED) );
 
+      // Layout Einstellungen für das Fenster in welchem die Figur dargestellt wird.
       Dimension dimension = new Dimension(100, 100);
       setLayout(new BorderLayout());
       contentPanel = new JPanel(new GridLayout(data.length, data[0].length));
       contentPanel.setPreferredSize(dimension);
       add(contentPanel, BorderLayout.CENTER);
 
+      // Beschriftung der Figur
       beschriftung = new JLabel(name);
       beschriftung.setHorizontalAlignment(SwingConstants.CENTER);
       add(beschriftung,BorderLayout.PAGE_END);
 
+      // Zellen werden nach dem data Schema generiert und dem Figur-Fenster hinzugefügt
       for (int[] i : this.data) {
         for (int j : i) {
           JPanel zelle = new JPanel();
@@ -443,8 +496,6 @@ public class GameOfLife extends JInternalFrame {
           contentPanel.add(zelle);
         }
       }
-
-      setBorder(new BevelBorder(BevelBorder.RAISED) );
     }
   }
 }
