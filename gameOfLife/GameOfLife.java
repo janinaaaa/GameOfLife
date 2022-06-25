@@ -7,8 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ContainerAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
@@ -28,10 +26,10 @@ import static java.lang.Thread.sleep;
  */
 public class GameOfLife extends JInternalFrame {
   Zelle[][] gameboard;
-  Color farbeTot = Color.lightGray;
-  Color farbeLebendig = Color.green;
-  JMenuItem farbeToteZelleÄndern;
-  JMenuItem farbeLebendigeZelleÄndern;
+  Color farbeTot;
+  Color farbeLebendig;
+  JMenuItem farbeToteZelleAendern;
+  JMenuItem farbeLebendigeZelleAendern;
   static int fensterzahl;
   JPopupMenu popupMenu;
   // Fenster geschlossen muss den Thread stoppen
@@ -47,8 +45,8 @@ public class GameOfLife extends JInternalFrame {
   /**
    * Konstruktor von Game of Life
    *
-   * @param sizeZeilen,
-   * @param sizeSpalten Die Größe des Spielfeldes von Game of Life
+   * @param sizeZeilen Anzahl Zeilen des Spielfeldes
+   * @param sizeSpalten Anzahl Spalten Spielfeldes
    * @param farbeL Farbe der lebendigen Zellen
    * @param farbeT Farbe der toten Zellen
    */
@@ -56,8 +54,8 @@ public class GameOfLife extends JInternalFrame {
     closed = false;
     farbeLebendig = farbeL;
     farbeTot = farbeT;
-    farbeToteZelleÄndern = new JMenuItem("Farbe: Tote Zellen");
-    farbeLebendigeZelleÄndern = new JMenuItem("Farbe: Lebendige Zellen");
+    farbeToteZelleAendern = new JMenuItem("Farbe: Tote Zellen");
+    farbeLebendigeZelleAendern = new JMenuItem("Farbe: Lebendige Zellen");
 
     // Spielfeldgröße setzen
     gameboard = new Zelle[sizeZeilen][sizeSpalten];
@@ -69,7 +67,7 @@ public class GameOfLife extends JInternalFrame {
     }
 
     //Man kann die Farben der toten Zellen über einen JColorChooser ändern
-    farbeToteZelleÄndern.addActionListener(
+    farbeToteZelleAendern.addActionListener(
         new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
@@ -83,7 +81,7 @@ public class GameOfLife extends JInternalFrame {
         });
 
     //Man kann die Farben der lebendigen Zellen über einen JColorChooser ändern
-    farbeLebendigeZelleÄndern.addActionListener(
+    farbeLebendigeZelleAendern.addActionListener(
         new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
@@ -159,8 +157,8 @@ public class GameOfLife extends JInternalFrame {
 
 
     popupMenu = new JPopupMenu();
-    popupMenu.add(farbeToteZelleÄndern);
-    popupMenu.add(farbeLebendigeZelleÄndern);
+    popupMenu.add(farbeToteZelleAendern);
+    popupMenu.add(farbeLebendigeZelleAendern);
     setComponentPopupMenu(popupMenu);
 
     setPreferredSize(new Dimension(250, 250));
