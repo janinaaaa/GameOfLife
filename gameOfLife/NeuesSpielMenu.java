@@ -74,7 +74,7 @@ public class NeuesSpielMenu extends JFrame {
         farbeTotWaehlen.setPreferredSize(new Dimension(75,25));
         farbeTot = Color.lightGray;
         farbeTotWaehlen.setBackground(farbeTot);
-    farbeTotWaehlen.addActionListener(
+        farbeTotWaehlen.addActionListener(
         new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
