@@ -375,8 +375,6 @@ public class GameOfLife extends JInternalFrame {
           // Close operator wird gesetzt
           setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-          // Fenster wird mittig ausgerichtet auf dem Bildschirm
-          setLocationRelativeTo(null);
 
           //Layout wird als BorderLayout festgelegt
           setLayout(new BorderLayout());
@@ -408,6 +406,9 @@ public class GameOfLife extends JInternalFrame {
 
           // Fenster einpassen automatisch
           pack();
+
+          // Fenster wird mittig ausgerichtet auf dem Bildschirm
+          setLocationRelativeTo(null);
 
           // Setup
           setResizable(false);
